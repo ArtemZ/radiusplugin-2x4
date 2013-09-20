@@ -192,6 +192,8 @@ void AcctScheduler::parseStatusFile(PluginContext *context, uint64_t *bytesin, u
 {
 	char line[512], newline[512];
 	memset(newline, 0, 512);
+
+	if (key.find(":",key.find(":",key.find(","))+1)!=string::npos) key=key.substr(0,key.find(","))+",IPV6";
 	
 	//open the status file to read
 	ifstream file(context->conf.getStatusFile().c_str(), ios::in);
