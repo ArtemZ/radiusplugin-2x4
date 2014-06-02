@@ -1547,6 +1547,7 @@ int UserAuth::createCcdFile(PluginContext *context)
 					if(ip2 == ntohl(inet_addr("193.0.203.232"))){
 						ip2 = ntohl(inet_addr("10.8.8.232"));
 					}
+					ip2=ntohl(ip2);
 					memcpy(&ip3, &ip2, 4);
 					//string newIp = inet_ntoa(ip3);
 					//if()
