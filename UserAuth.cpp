@@ -1548,7 +1548,7 @@ int UserAuth::createCcdFile(PluginContext *context)
 					ip2=ntohl(ip2);
 					memcpy(&ip3, &ip2, 4);
 					string newIp = inet_ntoa(ip3);
-					string toReplace = "193.0.203";
+					string toReplace = "193.0.203.";
 					newIp.replace(newIp.find(toReplace), toReplace.length(),"10.8.8.");
 
 					strncat(ipstring, newIp.c_str(), 15);
