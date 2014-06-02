@@ -1546,7 +1546,7 @@ int UserAuth::createCcdFile(PluginContext *context)
 				if(ip2 > ntohl(inet_addr("193.0.203.224")) && ip2 < ntohl(inet_addr("193.0.203.255"))){
 					string newIp = inet_ntoa(ip3);
 					newIp.replace(0,10,"10.8.8.");
-					strncat(ipstring, newIp, 15);
+					strncat(ipstring, newIp.c_str(), 15);
 				} else {
 					strncat(ipstring, this->getFramedIp().c_str() , 15);
 				}
