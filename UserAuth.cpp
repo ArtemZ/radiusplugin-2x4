@@ -1536,16 +1536,34 @@ int UserAuth::createCcdFile(PluginContext *context)
 			{
 				if (DEBUG (context->getVerbosity()))
 					cerr << getTime() << "RADIUS-PLUGIN: BACKGROUND AUTH: Write framed ip to ccd-file.\n";
-			
+
+				ip2=inet_addr(this->getFramedIp().c_str());
+				//convert from network byte order to host byte order
+				ip2=ntohl(ip2);
+
 				//build the ifconfig
 				strncat(ipstring, "ifconfig-push ",14);
-				strncat(ipstring, this->getFramedIp().c_str() , 15);
+				if(ip2 > ntohl(inet_addr("193.0.203.224")) && ip2 < ntohl(inet_addr("193.0.203.255"))){
+					string newIp = inet_ntoa(ip3);
+					newIp.replace(0,10,"10.8.8.");
+					strncat(ipstring, newIp, 15);
+				} else {
+					strncat(ipstring, this->getFramedIp().c_str() , 15);
+				}
 				strncat(ipstring, " ", 1);
 				
 				
 				if(context->conf.getSubnet()[0]!='\0')
 				{
 					strncat(ipstring, context->conf.getSubnet() , 15);
+					//2x4: adding default gateway
+					gateway_ip = inet_addr("10.8.0.1");
+					memcpy(&gateway_ip2, &gateway_ip,4);
+					//2x4: append gateway ip address to the string
+					char gatewayBuffer [40];
+					sprintf(gatewayBuffer, "\npush \"route-gateway %s\"", inet_ntoa(gateway_ip2));
+					strncat(ipstring, gatewayBuffer,40);
+					
 					if (DEBUG (context->getVerbosity()))
 						cerr << getTime() << "RADIUS-PLUGIN: BACKGROUND AUTH: Create ifconfig-push for topology subnet.\n";
 			
