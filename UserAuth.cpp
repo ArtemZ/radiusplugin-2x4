@@ -229,7 +229,7 @@ void UserAuth::parseResponsePacket(RadiusPacket *packet, PluginContext * context
 	
 	}
 	this->setFramedRoutes(froutes);
-	
+ 
 	
 	if (DEBUG (context->getVerbosity()))
     	cerr << getTime() << "RADIUS-PLUGIN: BACKGROUND AUTH: routes: " << this->getFramedRoutes() <<".\n";
@@ -1487,7 +1487,9 @@ int UserAuth::createCcdFile(PluginContext *context)
 	char framedip[16];
 	char ipstring[100];
 	in_addr_t ip2;
+	in_addr_t gateway_ip;
 	in_addr ip3;
+	in_addr gateway_ip2;
 	string filename;
 	char framedroutes[4096];
 	char framednetmask_cidr[3]; // ->/24
@@ -1564,13 +1566,26 @@ int UserAuth::createCcdFile(PluginContext *context)
 					//convert from network byte order to host byte order
 					ip2=ntohl(ip2);
 					//increment
-					ip2++;
+					//ip2++;
+					//2x4: check if ip is in the shared ip range, 10.8.0.0/24
+					//convert first and last ip 10.8.0.0/24 range to int
+					if(ip2 > ntohl(inet_addr("10.8.0.0")) && ip2 < ntohl(inet_addr("10.8.0.255"))){
+						gateway_ip = inet_addr("10.8.0.1");
+						//gateway_ip = ntohl(gateway_ip);
+					}
+					//2x4: check if framed ip falls in the dedicated ip range, 193.0.203.224/27
+					
 					//convert from host byte order to network byte order
 					ip2=htonl(ip2);
 					//copy from one unsigned int to another (casting don't work with these struct!?)
 					memcpy(&ip3, &ip2, 4);
+					memcpy(&gateway_ip2, &gateway_ip,4);
 					// append the new ip address to the string
 					strncat(ipstring, inet_ntoa(ip3), 15);
+					//2x4: append gateway ip address to the string
+					char gatewayBuffer [40];
+					sprintf(gatewayBuffer, "\npush \"route-gateway %s\"", inet_ntoa(gateway_ip2));
+					strncat(ipstring, gatewayBuffer,40);
 					if (DEBUG (context->getVerbosity()))
 						cerr << getTime() << "RADIUS-PLUGIN: BACKGROUND AUTH: Create ifconfig-push for topology net30.\n";
 			
