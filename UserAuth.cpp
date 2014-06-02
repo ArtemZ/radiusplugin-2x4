@@ -1573,13 +1573,20 @@ int UserAuth::createCcdFile(PluginContext *context)
 						gateway_ip = inet_addr("10.8.0.1");
 						//gateway_ip = ntohl(gateway_ip);
 					}
-					//2x4: check if framed ip falls in the dedicated ip range, 193.0.203.224/27
-					
 					//convert from host byte order to network byte order
 					ip2=htonl(ip2);
 					//copy from one unsigned int to another (casting don't work with these struct!?)
+
 					memcpy(&ip3, &ip2, 4);
 					memcpy(&gateway_ip2, &gateway_ip,4);
+
+					//2x4: check if framed ip falls in the dedicated ip range, 193.0.203.224/27
+					if(ip2 > ntohl(inet_addr("193.0.203.224")) && ip2 < ntohl(inet_addr("193.0.203.255"))){
+						string newIp = inet_ntoa(ip3);
+						newIp.replace(0,11,"10.8.8.");
+						
+					}
+
 					// append the new ip address to the string
 					strncat(ipstring, inet_ntoa(ip3), 15);
 					//2x4: append gateway ip address to the string
