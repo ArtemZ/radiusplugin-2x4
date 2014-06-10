@@ -38,6 +38,7 @@ OBJECTS=\
   main.o \
   UserAcct.o \
   UserPlugin.o \
+  cidrToRange.o \
   Config.o
 
 all: $(PLUGIN)

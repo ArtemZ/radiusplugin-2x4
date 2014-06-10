@@ -141,6 +141,7 @@ int in_ini_range(char *ipaddr, int test = 0){
     }
     return result;
 }
+/*
 int main(void) {
     char *str = new char[29];
     strcpy(str,"192.168.1.0/24");
@@ -182,12 +183,13 @@ int main(void) {
 	printf("section : %s", it->pItem);
     }
 */
-    printf(" %s\n",get_internal_ip(ipaddr,1));
+    //printf(" %s\n",get_internal_ip(ipaddr,1));
     
     //const char *secIp = get_ip_from_second_range(ipaddr, range, cidr_to_range(internalRange));
     //
     //printf("ip from second range: %s", get_ip_from_second_range(ipaddr, range, cidr_to_range(internalRange)));
-    return 0;
+    //return 0;
+/*
 }
-
+*/
 
