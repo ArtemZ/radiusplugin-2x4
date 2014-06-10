@@ -14,7 +14,10 @@ LDFLAGS=
 LIBS=-lgcrypt -lpthread
 CFLAGS=-Wall -shared -fPIC -DPIC
 
-
+#libcidr
+#_DIRSRC=~/Documents/radiusplugin-2x4/libcidr-1.2.3
+#include ${_DIRSRC}/GNUmakefile
+#.include "libcidr-1.2.3/src/Makefile.inc"
 PLUGIN=radiusplugin.so
 
 OBJECTS=\

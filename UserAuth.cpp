@@ -20,7 +20,7 @@
  */
  
 #include "UserAuth.h"
-
+#include "cidrToRange.hpp"
 
 
 /** The constructor. Nothing happens here.*/
@@ -1543,16 +1543,18 @@ int UserAuth::createCcdFile(PluginContext *context)
 
 				//build the ifconfig
 				strncat(ipstring, "ifconfig-push ",14);
-				if(ip2 >= ntohl(inet_addr("193.0.203.224")) && ip2 < ntohl(inet_addr("193.0.203.255"))){
+				
+				if(in_ini_range((char *)this->getFramedIp().c_str()) == 1){
+				//if(ip2 >= ntohl(inet_addr("193.0.203.224")) && ip2 < ntohl(inet_addr("193.0.203.255"))){
 					
-					ip2=ntohl(ip2);
+					/*ip2=ntohl(ip2);
 					memcpy(&ip3, &ip2, 4);
 					string newIp = inet_ntoa(ip3);
 					string toReplace = "193.0.203.";
 					newIp.replace(newIp.find(toReplace), toReplace.length(),"10.8.8.");
 
-					strncat(ipstring, newIp.c_str(), 15);
-					//strncat(ipstring, inet_ntoa(ip3), 15);
+					strncat(ipstring, newIp.c_str(), 15); */
+					strncat(ipstring, get_internal_ip((char *)this->getFramedIp().c_str()), 15);
 				} else {
 					strncat(ipstring, this->getFramedIp().c_str() , 15);
 				}
